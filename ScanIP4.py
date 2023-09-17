@@ -21,15 +21,15 @@ def ping(ip):
 # Función para enviar un correo electrónico
 def enviar_correo(ip):
     # Configuración del servidor SMTP
-    servidor_smtp = "smtp.serviciodecorreo.es"
+    servidor_smtp = "smtp.email.es"
     puerto_smtp = 465
-    usuario = "unionscaner@alhondigalaunion.es"
-    contrasena = "Ejido2021"
+    usuario = "usuario@usuario.es"
+    contrasena = "password"
 
     # Crear el mensaje
     mensaje = MIMEMultipart()
     mensaje["From"] = usuario
-    mensaje["To"] = "paganini.marcelo@gmail.com"
+    mensaje["To"] = "remitente@gmail.com"
     mensaje["Subject"] = "Tunel VPN caido no responde"
 
     cuerpo = f"La IP {ip} del tunel VPN no ha respondido después de 3 minutos."
@@ -40,7 +40,7 @@ def enviar_correo(ip):
         servidor = smtplib.SMTP(servidor_smtp, puerto_smtp)
         servidor.starttls()
         servidor.login(usuario, contrasena)
-        servidor.sendmail(usuario, "paganini.marcelo@gmail.com", mensaje.as_string())
+        servidor.sendmail(usuario, "remitente@gmail.com", mensaje.as_string())
         servidor.quit()
         print(f"{Fore.GREEN}{ip} El túnel VPN está respondiendo.{Style.RESET_ALL}")  # Texto en verde
     except Exception as e:
