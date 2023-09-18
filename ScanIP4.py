@@ -20,31 +20,32 @@ def ping(ip):
 
 # Función para enviar un correo electrónico
 def enviar_correo(ip):
-    # Configuración del servidor SMTP
-    servidor_smtp = "smtp.email.es"
-    puerto_smtp = 465
-    usuario = "usuario@usuario.es"
+    remitente = "remitente@hotmail.com"
+    destinatario = "destinatario@gmail.com"
+    asunto = "IP no responde"
+    mensaje = f"La IP {ip} no ha respondido después de 3 minutos."
+
+    mensaje_email = MIMEMultipart()
+    mensaje_email["From"] = remitente
+    mensaje_email["To"] = destinatario
+    mensaje_email["Subject"] = asunto
+    mensaje_email.attach(MIMEText(mensaje, "plain"))
+
+    servidor_smtp = "smtp-mail.outlook.com"
+    puerto_smtp = 587
+    usuario = "usuario@hotmail.com"
     contrasena = "password"
 
-    # Crear el mensaje
-    mensaje = MIMEMultipart()
-    mensaje["From"] = usuario
-    mensaje["To"] = "remitente@gmail.com"
-    mensaje["Subject"] = "Tunel VPN caido no responde"
-
-    cuerpo = f"La IP {ip} del tunel VPN no ha respondido después de 3 minutos."
-    mensaje.attach(MIMEText(cuerpo, "plain"))
-
-    # Conectar al servidor SMTP y enviar el correo
     try:
         servidor = smtplib.SMTP(servidor_smtp, puerto_smtp)
         servidor.starttls()
         servidor.login(usuario, contrasena)
-        servidor.sendmail(usuario, "remitente@gmail.com", mensaje.as_string())
+        servidor.sendmail(remitente, destinatario, mensaje_email.as_string())
         servidor.quit()
-        print(f"{Fore.GREEN}{ip} El túnel VPN está respondiendo.{Style.RESET_ALL}")  # Texto en verde
+        print(f"Correo electrónico enviado para la IP {ip}.")
     except Exception as e:
-        print(f"{Fore.RED}Error al enviar el correo electrónico: {str(e)}{Style.RESET_ALL}")  # Texto en rojo
+        print(f"Error al enviar el correo electrónico: {str(e)}")
+
 
 # Bucle infinito
 while True:
@@ -68,3 +69,5 @@ while True:
         tiempo_restante -= 1
 
     print("Iniciando nuevo ciclo...\n")
+
+
